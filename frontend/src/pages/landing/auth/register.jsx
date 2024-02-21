@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from 'axios'
 
 
 const Register = (props) => {
@@ -9,6 +10,10 @@ const Register = (props) => {
     confirmPassword: ''
   })
 
+
+
+  const [ message, setMessage ] = useState()
+
   const { email, password, confirmPassword } = submitForm
 
   const formChangeHandler = (e) => {
@@ -18,10 +23,54 @@ const Register = (props) => {
     }))
   }
 
+const inputValidation = (email, password, passwordConfirm) => {
+  if(!email) {
+    setMessage('please enter your email')
+    return false
+  }
+  if(!password) {
+    setMessage('please enter your password')
+    return false
+  }
+  if(!passwordConfirm) {
+    setMessage('please enter confirming password')
+    return false
+  }
+  
+  if(password !== passwordConfirm) {
+    setMessage('Your passwords do not match')
+    return false
+  }
+  
+  return true
+}
+
+
   const clickHandler = (e) => {
     e.preventDefault()
 
+    if(!inputValidation(email, password, confirmPassword)) {
+      return
+    }
+
+
+
+    // todo: API call
+
+    const sendOutForm = {
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword
+    }
+
+
+    const requestToAPI = async (form) => {
+      const request = await axios.post(`${process.env.REACT_APP_BACKEND}/auth/register`, form)
+    }
     console.log('button clicked')
+
+    requestToAPI(sendOutForm)
+
   }
 
   return (
@@ -29,6 +78,7 @@ const Register = (props) => {
 
     <div>
       <p>Resister Account</p>
+      {message && <p> {message} </p>}
       <form onSubmit={clickHandler}>
         <div>
           <p>email</p>
