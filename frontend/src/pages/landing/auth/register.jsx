@@ -65,9 +65,17 @@ const inputValidation = (email, password, passwordConfirm) => {
 
 
     const requestToAPI = async (form) => {
-      const request = await axios.post(`${process.env.REACT_APP_BACKEND}/auth/register`, form)
+      try {
+
+        const request = await axios.post(`${process.env.REACT_APP_BACKEND}/auth/register`, form)
+  
+        if(request) {
+        }
+        console.log(request.data)
+      } catch (error) {
+        console.log(error)
+      }
     }
-    console.log('button clicked')
 
     requestToAPI(sendOutForm)
 
